@@ -1,0 +1,15 @@
+#!/usr/bin/env perl
+
+# Pulss Down Docker Images from Docker Hub
+
+@images = <DATA>;
+
+foreach $image (@images) {
+  print("*** Pulling Docker Image: $image");
+  system("/usr/local/bin/docker pull $image");
+}
+
+__END__
+ruby
+ubuntu
+kalilinux/kali-linux-docker

@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+## Pulls down Docker Images from a list in a YAML File
+
+require 'yaml'
+class DVM
+  DOCKER_BIN = '/usr/local/bin/docker'
+
+  def self.config
+    File.exist?('dvm.yml') ? YAML.load_file('dvm.yml') : (puts 'File Not Found: dvm.yml'; exit 1)
+  end
+
+  def config
+    self.class.config
+  end
+
+  def self.docker_pull(image)
+    puts "*** Pulling Docker Image #{image}"
+    system("#{DOCKER_BIN} pull #{image}")
+  end
+
+  def self.run
+    (puts "Unable to find #{DOCKER_BIN}";exit 1) if !File.exist?(DOCKER_BIN)
+    config['images'].each { |image| docker_pull(image) }
+  end
+
+  def self.help
+    puts "Usage: dvm run\n\nPulls down Docker Images from Docker Hub."
+  end
+end
+
+(DVM.help; exit 0) if ARGV[0] && ARGV[0].match(/(-h|--help|help)/)
+
+DVM.run
