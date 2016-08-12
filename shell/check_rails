@@ -1,0 +1,28 @@
+#!/bin/bash
+# set -x
+# git archive --remote=git@HOST:GROUP/REPO.git HEAD Gemfile | tar -xO | grep "gem 'rails'" | awk '{ print $3 }'
+
+# Repos to check
+readonly REPOS=(
+  'username/myapp'
+  'username/myapp2'
+)
+
+# Git Host
+readonly GIT_HOST_INFO=git@github.com
+
+check_rails_version() {
+  local repo=$1; shift
+  local rails_version=$(git archive --remote=${GIT_HOST_INFO}:${repo}.git HEAD Gemfile 2>/dev/null | tar -xO | grep "gem 'rails'" | awk '{ print $3 }')
+
+  echo "${repo}: ${rails_version}"
+}
+
+main() {
+  local i
+  for i in "${REPOS[@]}"; do
+    check_rails_version $i
+  done
+}
+
+main $@
