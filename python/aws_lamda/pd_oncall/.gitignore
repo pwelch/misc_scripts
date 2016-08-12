@@ -1,0 +1,5 @@
+# Ignore packaged artifact
+package.zip
+
+# Ignore vendor dependencies
+requests*
